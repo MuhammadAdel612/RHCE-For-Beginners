@@ -1,0 +1,213 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fmodern Consolas;}{\f1\fnil\fcharset129 Courier New;}}
+{\colortbl ;\red20\green20\blue20;\red142\green142\blue142;\red9\green118\blue72;\red170\green64\blue64;\red126\green126\blue12;}
+\viewkind4\uc1\pard\f0\fs20 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ########## Getting Started ########################\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# #Module: like binary or command in administration but in python script which is default in ansible\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# # How to use modules: 1. Adhoc      2. playbook\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# #First of all  : what is adhoc?\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# to use single module over the shell once for example watch the following:\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m ping\cf1\highlight2 
+\par \cf3\highlight0 worker1 | SUCCESS => \{\cf1\highlight2 
+\par \cf3\highlight0     "ansible_facts": \{\cf1\highlight2 
+\par \cf3\highlight0         "discovered_interpreter_python": "/usr/bin/python3"\cf1\highlight2 
+\par \cf3\highlight0     \},\cf1\highlight2 
+\par \cf3\highlight0     "changed": false,\cf1\highlight2 
+\par \cf3\highlight0     "ping": "pong"\cf1\highlight2 
+\par \cf3\highlight0\}\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# As you can see, Adhoc start with "ansible" followd by name of the machine or the group of servers you will execute against, then -m for module, <ping is module wriiten in python for ansible to work as ping command in linux>\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m yum -a 'name=vsftpd state=installed'\cf1\highlight2 
+\par \cf4\highlight0  [ERROR]: User interrupted execution\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m service -a 'name=vsftpd state=started enabled=yes'\cf1\highlight2 
+\par \cf4\highlight0  [ERROR]: User interrupted execution\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m command -a 'touch /tmp/lilo'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par 
+\par \cf0\highlight0 [root@ipa rhce]# conclusion: adhoc for\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ##### conclusion: adhoc for quick tasks or retreive data\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# #### Using Modules ####\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# Command Module: to run commands against remote nodes\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m command -a 'systemctl status sshd'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par \cf5\highlight0\u9679? sshd.service - OpenSSH server daemon\cf1\highlight2 
+\par \cf5\highlight0      Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; preset: enabled)\cf1\highlight2 
+\par \cf5\highlight0      Active: active (running) since Fri 2026-04-03 20:15:29 EET; 1h 26min ago\cf1\highlight2 
+\par \cf5\highlight0        Docs: man:sshd(8)\cf1\highlight2 
+\par \cf5\highlight0              man:sshd_config(5)\cf1\highlight2 
+\par \cf5\highlight0    Main PID: 1123 (sshd)\cf1\highlight2 
+\par \cf5\highlight0       Tasks: 1 (limit: 93872)\cf1\highlight2 
+\par \cf5\highlight0      Memory: 5.0M\cf1\highlight2 
+\par \cf5\highlight0         CPU: 415ms\cf1\highlight2 
+\par \cf5\highlight0      CGroup: /system.slice/sshd.service\cf1\highlight2 
+\par \cf5\highlight0              \u9492?\u9472?1123 "sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups"\cf1\highlight2 
+\par 
+\par \cf5\highlight0 Apr 03 21:29:27 node1 sshd[4558]: Accepted publickey for root from 7.7.21.1 port 34040 ssh2: RSA SHA256:0vFUtp/N+ogm5nNFGlJkmxGHy4Kg/8jN2zNyh+QDnSo\cf1\highlight2 
+\par \cf5\highlight0 Apr 03 21:29:28 node1 sshd[4558]: pam_unix(sshd:session): session opened for user root(uid=0) by root(uid=0)\cf1\highlight2 
+\par \cf5\highlight0 Apr 03 21:34:34 node1 sshd[4963]: Accepted publickey for root from 7.7.21.1 port 38612 ssh2: RSA SHA256:0vFUtp/N+ogm5nNFGlJkmxGHy4Kg/8jN2zNyh+QDnSo\cf1\highlight2 
+\par \cf5\highlight0 Apr 03 21:34:34 node1 sshd[4963]: pam_unix(sshd:session): session opened for user root(uid=0) by root(uid=0)\cf1\highlight2 
+\par \cf5\highlight0 Apr 03 21:34:45 node1 sshd[5179]: Accepted publickey for root from 7.7.21.1 port 52378 ssh2: RSA SHA256:0vFUtp/N+ogm5nNFGlJkmxGHy4Kg/8jN2zNyh+QDnSo\cf1\highlight2 
+\par \cf5\highlight0 Apr 03 21:34:45 node1 sshd[5179]: pam_unix(sshd:session): session opened for user root(uid=0) by root(uid=0)\cf1\highlight2 
+\par \cf5\highlight0 Apr 03 21:38:07 node1 sshd[5359]: Accepted publickey for root from 7.7.21.1 port 33474 ssh2: RSA SHA256:0vFUtp/N+ogm5nNFGlJkmxGHy4Kg/8jN2zNyh+QDnSo\cf1\highlight2 
+\par \cf5\highlight0 Apr 03 21:38:07 node1 sshd[5359]: pam_unix(sshd:session): session opened for user root(uid=0) by root(uid=0)\cf1\highlight2 
+\par \cf5\highlight0 Apr 03 21:42:12 node1 sshd[5741]: Accepted publickey for root from 7.7.21.1 port 59668 ssh2: RSA SHA256:0vFUtp/N+ogm5nNFGlJkmxGHy4Kg/8jN2zNyh+QDnSo\cf1\highlight2 
+\par \cf5\highlight0 Apr 03 21:42:12 node1 sshd[5741]: pam_unix(sshd:session): session opened for user root(uid=0) by root(uid=0)\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m command -a 'mkdir /tmp/ansible'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m command -a 'mkdir /tmp/ansible/folder'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m command -a 'touch /tmp/ansible/file'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m command -a 'ls -l /tmp/ansible'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par \cf5\highlight0 total 0\cf1\highlight2 
+\par \cf5\highlight0 -rw-r--r--. 1 root root 0 Apr  3 21:44 file\cf1\highlight2 
+\par \cf5\highlight0 drwxr-xr-x. 2 root root 6 Apr  3 21:43 folder\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -a 'chmod 777 /tmp/ansible/folder'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m command -a 'ls -l /tmp/ansible'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par \cf5\highlight0 total 0\cf1\highlight2 
+\par \cf5\highlight0 -rw-r--r--. 1 root root 0 Apr  3 21:44 file\cf1\highlight2 
+\par \cf5\highlight0 drwxrwxrwx. 2 root root 6 Apr  3 21:43 folder\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ### hint: command module does not use shell symbols like " ; ! $ > < | && "\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m command -a 'echo welcome > /tmp/hi'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par \cf5\highlight0 welcome > /tmp/hi\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m shell -a 'echo welcome > /tmp/hi'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m shell -a 'cat /tmp/hi'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par \cf5\highlight0 welcome\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m shell -a 'cal ; date'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par \cf5\highlight0      April 2026\cf1\highlight2 
+\par \cf5\highlight0 Su Mo Tu We Th Fr Sa\cf1\highlight2 
+\par \cf5\highlight0           1  2  3  4\cf1\highlight2 
+\par \cf5\highlight0  5  6  7  8  9 10 11\cf1\highlight2 
+\par \cf5\highlight0 12 13 14 15 16 17 18\cf1\highlight2 
+\par \cf5\highlight0 19 20 21 22 23 24 25\cf1\highlight2 
+\par \cf5\highlight0 26 27 28 29 30\cf1\highlight2 
+\par 
+\par \cf5\highlight0 Fri Apr  3 10:07:00 PM EET 2026\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible worker1 -m shell -a 'ls -l /etc | grep -i ssh'\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par \cf5\highlight0 drwxr-xr-x.  2 root root        62 Nov 20 18:47 libssh\cf1\highlight2 
+\par \cf5\highlight0 drwxr-xr-x.  4 root root      4096 Dec 30 19:07 ssh\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ###hint: if your command\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ###hint: if your command will use shell symbols, USE SHELL MODULE\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# vim adhoc-in-scripting.sh\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# sh adhoc-in-scripting.sh\cf1\highlight2 
+\par \cf3\highlight0 worker1 | SUCCESS => \{\cf1\highlight2 
+\par \cf3\highlight0     "ansible_facts": \{\cf1\highlight2 
+\par \cf3\highlight0         "discovered_interpreter_python": "/usr/bin/python3"\cf1\highlight2 
+\par \cf3\highlight0     \},\cf1\highlight2 
+\par \cf3\highlight0     "changed": false,\cf1\highlight2 
+\par \cf3\highlight0     "ping": "pong"\cf1\highlight2 
+\par \cf3\highlight0\}\cf1\highlight2 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par 
+\par \cf5\highlight0 worker1 | CHANGED | rc=0 >>\cf1\highlight2 
+\par 
+\par \cf0\highlight0 [root@ipa rhce]# cat adhoc-in-scripting.sh\cf1\highlight2 
+\par \cf0\highlight0 #!/bin/bash\cf1\highlight2 
+\par 
+\par \cf0\highlight0 ansible worker1 -m ping\cf1\highlight2 
+\par \cf0\highlight0 ansible worker1 -m command -a "mkdir /tmp/sammoha"\cf1\highlight2 
+\par \cf0\highlight0 ansible worker1 -m shell -a 'touch /tmp/sammoha/file'\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ### PLAYBOOKS ###\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# vim playbooks/first-example.yaml\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible-playbook playbooks/first-example.yaml\cf1\highlight2 
+\par 
+\par \cf0\highlight0 PLAY [my first example] *********************************************************************************************************************************\cf1\highlight2 
+\par 
+\par \cf0\highlight0 TASK [Gathering Facts] **********************************************************************************************************************************\cf1\highlight2 
+\par \cf3\highlight0 ok: [worker1]\cf1\highlight2 
+\par 
+\par \cf0\highlight0 TASK [create folder] ************************************************************************************************************************************\cf1\highlight2 
+\par \cf4\highlight0 fatal: [worker1]: FAILED! => \{"changed": false, "cmd": "/tmp/fifo", "msg": "[Errno 2] No such file or directory: b'/tmp/fifo'", "rc": 2, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []\}\cf1\highlight2 
+\par 
+\par \cf0\highlight0 PLAY RECAP **********************************************************************************************************************************************\cf1\highlight2 
+\par \cf4\highlight0 worker1\cf0                     : \cf3 ok=1   \cf0  changed=0    unreachable=0    \cf4 failed=1   \cf0  skipped=0    rescued=0    ignored=0\cf1\highlight2 
+\par 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# vim playbooks/first-example.yaml\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \cf0\highlight0 [root@ipa rhce]# ansible-playbook playbooks/first-example.yaml\cf1\highlight2 
+\par 
+\par \cf0\highlight0 PLAY [my first example] *********************************************************************************************************************************\cf1\highlight2 
+\par 
+\par \cf0\highlight0 TASK [Gathering Facts] **********************************************************************************************************************************\cf1\highlight2 
+\par \cf3\highlight0 ok: [worker1]\cf1\highlight2 
+\par 
+\par \cf0\highlight0 TASK [create folder] ************************************************************************************************************************************\cf1\highlight2 
+\par \cf5\highlight0 changed: [worker1]\cf1\highlight2 
+\par 
+\par \cf0\highlight0 TASK [create file in previous folder] *******************************************************************************************************************\cf1\highlight2 
+\par \cf5\highlight0 changed: [worker1]\cf1\highlight2 
+\par 
+\par \cf0\highlight0 PLAY RECAP **********************************************************************************************************************************************\cf1\highlight2 
+\par \cf5\highlight0 worker1\cf0                     : \cf3 ok=3   \cf0  \cf5 changed=2   \cf0  unreachable=0    failed=0    skipped=0    rescued=0    ignored=0\cf1\highlight2 
+\par 
+\par \cf0\highlight0 [root@ipa rhce]#\cf1\highlight2 
+\par \pard\cf0\highlight0\f1\fs16 
+\par }
+ 

@@ -1,0 +1,11 @@
+---
+- name: my first example
+  hosts: worker1
+  tasks:
+    - name: create folder
+      command: mkdir /tmp/fifo
+
+    - name: create file in previous folder
+      shell: echo welcome Mr. Sameh from Suez in Germany > /tmp/fifo/welcome
+
+
