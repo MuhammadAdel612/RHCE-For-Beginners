@@ -3,3 +3,8 @@
   tasks:
     - name: create file with name lilo
       shell: touch /tmp/lilo
+
+    - name: install a package httpd 
+      yum: 
+        name: httpd 
+        state: installed
