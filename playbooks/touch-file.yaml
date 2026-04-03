@@ -1,0 +1,5 @@
+---
+- hosts: worker1
+  tasks:
+    - name: create file with name dodo
+      command: touch /opt/dodo
